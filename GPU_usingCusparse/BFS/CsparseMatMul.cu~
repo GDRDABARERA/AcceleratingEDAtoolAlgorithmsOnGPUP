@@ -1,0 +1,142 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <err.h>	
+#include <cuda_runtime.h>
+#include "cusparse.h"
+
+
+#define CLEANUP(s)                                   \
+do {                                                 \
+    printf ("%s\n", s);                              \
+    if (csrValAHostPtr) free(csrValAHostPtr);\
+    if (csrColIndexAHostPtr) free(csrColIndexAHostPtr);\
+    if (csrRowPtrAHostPtr)      free(csrRowPtrAHostPtr);     \
+    if (csrValACuda)        cudaFree(csrValACuda);   \
+    if (csrColIndexACuda)        cudaFree(cooColIndex);   \
+    if (csrRowPtrACudaPtr)             cudaFree(csrRowPtrACudaPtr);        \
+    if (handle)             cusparseDestroy(handle); \
+    fflush (stdout);                                 \
+} while (0)
+
+int findMaxColNo(int array[] ){
+	int k;
+	int max = INT_MIN;
+	for(k=0;k<(sizeof(array)/sizeof(int));k++){
+		if(max<array[k]){
+			max=array[k];
+		}
+	}
+	printf("return max %d\n",max+1 );
+	return max+1;
+
+}
+int main(){
+    cudaError_t cudaStat1,cudaStat2,cudaStat3; //,cudaStat4,cudaStat5,cudaStat6;
+    cusparseStatus_t status;
+    cusparseHandle_t handle=0;
+    cusparseMatDescr_t descra=0;
+    int *    csrColIndexAHostPtr=0;
+    int *    csrRowPtrAHostPtr=0;    
+    float *  csrValAHostPtr=0.0;
+    float * xHost=0.0;
+    float * yHost=0.0;
+    int *    csrColIndexACuda=0;
+    int *    csrRowPtrACudaPtr=0;    
+    float * csrValACuda=0.0;
+    int *    cscColIndexACuda=0;
+    int *    cscRowPtrACudaPtr=0;    
+    float * cscValACuda=0.0;
+    float * xCuda=0.0;
+    float * tmpCuda=0.0;
+    float * yCuda=0.0;
+
+    
+    int     m, n, nnz, nnz_vector, i, j;
+    printf("testing example\n");
+
+    //n=4; nnz=9; 
+/*
+* FILE read and get the data 
+*/
+
+  /*  FILE *fp;
+    fp = fopen("data.txt","r");
+    size_t len;
+    char *line; */
+    
+    csrColIndexAHostPtr = { 0 , 1 , 1 , 3 , 2 , 3 , 4 , 5};
+    csrValAHostPtr = {10.0 ,20.0 ,30.0 ,40.0 ,50.0 ,60.0 ,70.0 ,80.0 }; 
+    csrRowPtrAHostPtr ={0 ,2 ,4 , 7, 8 }; 
+    
+    nnz = sizeof(csrColIndexAHostPtr)/sizeof(int); //no of non zero elements
+    m= sizeof(csrRowPtrAHostPtr)/sizeof(int); //no of rows
+    n=findMaxColNo(csrColIndexAHostPtr); //no of cols
+    
+    ///////here m==n  
+    
+    
+   printf("\n");
+
+	/********************************** CUDA stuff starts here *******************************/
+	
+	//start measuring time
+	cudaEvent_t start,stop;
+	float elapsedtime;
+	cudaEventCreate(&start);
+	cudaEventRecord(start,0);
+	
+     cudaMalloc((void**)&csrColIndexACuda,nnz*sizeof(int)); 
+     cudaMalloc((void**)&csrValACuda,nnz*sizeof(float));
+     cudaMalloc((void**)&csrRowPtrACudaPtr,  n*sizeof(int)); 
+     cudaMalloc((void**)&cscColIndexACuda,nnz*sizeof(int)); 
+     cudaMalloc((void**)&cscValACuda,nnz*sizeof(float));
+     cudaMalloc((void**)&cscRowPtrACudaPtr,  m*sizeof(int)); 
+     cudaMalloc((void**)&xCuda,n*sizeof(float)); 
+     cudaMalloc((void**)&yCuda,n*sizeof(float));
+     cudaMalloc((void**)&tmpCuda,m*sizeof(float));
+     
+     cudaMemcpy(csrColIndexACuda,csrColIndexAHostPtr,nnz*sizeof(int),cudaMemcpyHostToDevice);
+     cudaMemcpy(csrValACuda,csrValAHostPtr,nnz*sizeof(float),cudaMemcpyHostToDevice);
+     cudaMemcpy(csrRowPtrACudaPtr,csrRowPtrAHostPtr,n*sizeof(int),cudaMemcpyHostToDevice);
+     cudaMemcpy(cscColIndexACuda,csrColIndexAHostPtr,nnz*sizeof(int),cudaMemcpyHostToDevice);
+     cudaMemcpy(cscValACuda,csrValAHostPtr,nnz*sizeof(float),cudaMemcpyHostToDevice);
+     cudaMemcpy(cscRowPtrACudaPtr,csrRowPtrAHostPtr,n*sizeof(int),cudaMemcpyHostToDevice);
+     cudaMemcpy(xCuda,xHost,n*sizeof(float),cudaMemcpyHostToDevice);
+
+     
+    cusparseOperation_t trans= CUSPARSE_OPERATION_NON_TRANSPOSE;
+    const cusparseMatDescr_t descrA =CUSPARSE_MATRIX_TYPE_GENERAL;
+    cusparseIndexBase_t idxBase = CUSPARSE_INDEX_BASE_ZERO;
+    cusparseAction_t copyValues= CUSPARSE_ACTION_NUMERIC;
+    
+    cusparseScsr2csc(handle,m,n,nnz,csrValACuda,csrRowPtrACudaPtr,csrColIndexACuda,cscValACuda,cscColIndexACuda,cscRowPtrACudaPtr,copyValues, idxBase);
+    
+   cusparseScsrmv(handle,trans,n,m,nnz,1.0,descrA,cscValACuda,cscRowPtrACudaPtr,cscColIndexACuda,xCuda,tmpCuda,1.0);  
+	
+   cusparseScsrmv(handle,trans,n,m,nnz,1.0,descrA,cscValACuda,cscRowPtrACudaPtr,cscColIndexACuda,tmpCuda,yCuda,1.0);  
+		 
+	
+     cudaMemcpy(yCuda,yHost,n*sizeof(float),cudaMemcpyDeviceToHost);
+     
+     
+     
+     //free the cuda memory
+	cudaFree(csrColIndexACuda);
+	cudaFree(csrValACuda);
+	cudaFree(csrRowPtrACudaPtr);
+	cudaFree(cscColIndexACuda);
+	cudaFree(cscValACuda);
+	cudaFree(cscRowPtrACudaPtr);
+	cudaFree(xCuda);
+	cudaFree(yCuda);
+	cudaFree(tmpCuda);
+	
+	
+	//end measuring time
+	cudaEventCreate(&stop);
+	cudaEventRecord(stop,0);
+	cudaEventSynchronize(stop);
+	cudaEventElapsedTime(&elapsedtime,start,stop);
+	
+        return 0;
+}

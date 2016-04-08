@@ -1,0 +1,55 @@
+e11064@tesla:~/CUDEx/BFS$ nvcc CusparseBFS.cu -lcusparse -o BFS
+CusparseBFS.cu(67): error: expected an expression
+
+CusparseBFS.cu(68): error: expected an expression
+
+CusparseBFS.cu(69): error: expected an expression
+
+CusparseBFS.cu(104): warning: variable "xHost" is used before its value is set
+
+CusparseBFS.cu(108): error: a value of type "cusparseMatrixType_t" cannot be used to initialize an entity of type "cusparseMatDescr_t"
+
+CusparseBFS.cu(112): warning: variable "handle" is used before its value is set
+
+CusparseBFS.cu(114): error: argument of type "double" is incompatible with parameter of type "const double *"
+
+CusparseBFS.cu(114): error: argument of type "double" is incompatible with parameter of type "double *"
+
+CusparseBFS.cu(116): error: argument of type "double" is incompatible with parameter of type "const double *"
+
+CusparseBFS.cu(116): error: argument of type "double" is incompatible with parameter of type "double *"
+
+CusparseBFS.cu(119): warning: variable "yHost" is used before its value is set
+
+CusparseBFS.cu(144): error: identifier "elapsedtimekernel" is undefined
+
+CusparseBFS.cu(35): warning: variable "status" was declared but never referenced
+
+CusparseBFS.cu(54): warning: variable "nnz_vector" was declared but never referenced
+
+CusparseBFS.cu(54): warning: variable "i" was declared but never referenced
+
+CusparseBFS.cu(54): warning: variable "j" was declared but never referenced
+
+9 errors detected in the compilation of "/tmp/tmpxft_000044a9_00000000-9_CusparseBFS.cpp1.ii".
+
+
+
+
+
+   cusparseHandle_t handle=0;
+    cusparseMatDescr_t descra=0;
+    int *    csrColIndexAHostPtr=0;
+    int *    csrRowPtrAHostPtr=0;    
+    double *  csrValAHostPtr=0.0;
+    double * xHost=0.0;
+    float * yHost=0.0;
+    int *    csrColIndexACuda=0;
+    int *    csrRowPtrACudaPtr=0;    
+    double * csrValACuda=0.0;
+    int *    cscColIndexACuda=0;
+    int *    cscRowPtrACudaPtr=0;    
+    double * cscValACuda=0.0;
+    double * xCuda=0.0;
+    double * tmpCuda=0.0;
+    double * yCuda=0.0;

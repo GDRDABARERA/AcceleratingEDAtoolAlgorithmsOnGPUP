@@ -1,0 +1,55 @@
+11064@tesla:~/CUDEx$ nvcc BFS/CusparseBFS.cu -lcusparse -o BFS
+BFS/CusparseBFS.cu(38): error: a value of type "cusparseMatrixType_t" cannot be used to initialize an entity of type "cusparseMatDescr_t"
+
+BFS/CusparseBFS.cu(71): error: expected an expression
+
+BFS/CusparseBFS.cu(72): error: expected an expression
+
+BFS/CusparseBFS.cu(73): error: expected an expression
+
+BFS/CusparseBFS.cu(108): warning: variable "xHost" is used before its value is set
+
+BFS/CusparseBFS.cu(113): warning: variable "handle" is used before its value is set
+
+BFS/CusparseBFS.cu(115): error: argument of type "double" is incompatible with parameter of type "const double *"
+
+BFS/CusparseBFS.cu(115): error: argument of type "double" is incompatible with parameter of type "double *"
+
+BFS/CusparseBFS.cu(117): error: argument of type "double" is incompatible with parameter of type "const double *"
+
+BFS/CusparseBFS.cu(117): error: argument of type "double" is incompatible with parameter of type "double *"
+
+BFS/CusparseBFS.cu(120): warning: variable "yHost" is used before its value is set
+
+BFS/CusparseBFS.cu(145): error: identifier "elapsedtimekernel" is undefined
+
+BFS/CusparseBFS.cu(35): warning: variable "status" was declared but never referenced
+
+BFS/CusparseBFS.cu(58): warning: variable "nnz_vector" was declared but never referenced
+
+BFS/CusparseBFS.cu(58): warning: variable "i" was declared but never referenced
+
+BFS/CusparseBFS.cu(58): warning: variable "j" was declared but never referenced
+
+9 errors detected in the compilation of "/tmp/tmpxft_000044e9_00000000-9_CusparseBFS.cpp1.ii".
+e11064@tesla:~/CUDEx$ 
+
+
+
+
+   cusparseHandle_t handle=0;
+    cusparseMatDescr_t descra=0;
+    int *    csrColIndexAHostPtr=0;
+    int *    csrRowPtrAHostPtr=0;    
+    double *  csrValAHostPtr=0.0;
+    double * xHost=0.0;
+    float * yHost=0.0;
+    int *    csrColIndexACuda=0;
+    int *    csrRowPtrACudaPtr=0;    
+    double * csrValACuda=0.0;
+    int *    cscColIndexACuda=0;
+    int *    cscRowPtrACudaPtr=0;    
+    double * cscValACuda=0.0;
+    double * xCuda=0.0;
+    double * tmpCuda=0.0;
+    double * yCuda=0.0;
