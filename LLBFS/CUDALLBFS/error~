@@ -1,0 +1,36 @@
+e11064@tesla:~/CUDAEx/CUDALLBFS$ ./compile.sh 
+bfsLLRR1.cu(38): error: identifier "finalLevel" is undefined
+
+bfsLLRR1.cu(39): error: a __device__ function call cannot be configured
+
+bfsLLRR1.cu(41): error: identifier "checkCudaError" is undefined
+
+bfsLLRR1.cu(66): error: argument of type "Edge *" is incompatible with parameter of type "Edge **"
+
+bfsLLRR1.cu(66): error: a __device__ function call cannot be configured
+
+bfsLLRR1.cu(68): error: identifier "checkCudaError" is undefined
+
+bfsLLRR1.cu(102): error: identifier "checkCudaError" is undefined
+
+bfsLLRR1.cu(125): warning: variable "adjacencyList" is used before its value is set
+
+bfsLLRR1.cu(137): error: operand types are incompatible ("int" and "int *")
+
+bfsLLRR1.cu(148): error: operand types are incompatible ("int" and "int *")
+
+bfsLLRR1.cu(171): error: operand types are incompatible ("int" and "int *")
+
+bfsLLRR1.cu(186): error: argument of type "Edge **" is incompatible with parameter of type "Edge *"
+
+bfsLLRR1.cu(202): error: operand types are incompatible ("int" and "int *")
+
+bfsLLRR1.cu(210): error: operand types are incompatible ("int" and "int *")
+
+bfsLLRR1.cu(211): error: operand types are incompatible ("int" and "int *")
+
+bfsLLRR1.cu(98): warning: variable "j" was declared but never referenced
+
+14 errors detected in the compilation of "/tmp/tmpxft_00000d22_00000000-14_bfsLLRR1.cpp1.ii".
+e11064@tesla:~/CUDAEx/CUDALLBFS$ 
+

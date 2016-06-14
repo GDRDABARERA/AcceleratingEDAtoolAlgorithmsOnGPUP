@@ -1,0 +1,55 @@
+e11064@tesla:~/CUDAEx/CUDALLBFS$ ./a.out
+No fo rows 11, No of Cols 11, nnz 16 
+
+Adjacency List - of graph 
+
+adjacencyList[0] -> 9 -> 8 -> 7 -> NULL
+adjacencyList[1] -> 6 -> NULL
+adjacencyList[2] -> 9 -> 8 -> 6 -> NULL
+adjacencyList[3] -> 7 -> NULL
+adjacencyList[4] -> 9 -> 7 -> 6 -> NULL
+adjacencyList[5] -> 8 -> NULL
+adjacencyList[6] -> 10 -> NULL
+adjacencyList[7] -> 10 -> NULL
+adjacencyList[8] -> 10 -> NULL
+adjacencyList[9] -> 10 -> NULL
+adjacencyList[10] -> NULL
+Cuda error: an illegal memory access was encountered 
+ in file : bfsLLRR1.cu line number : 189
+e11064@tesla:~/CUDAEx/CUDALLBFS$ nano compile.sh
+e11064@tesla:~/CUDAEx/CUDALLBFS$ ./compile.sh 
+ptxas info    : 0 bytes gmem
+ptxas info    : Function properties for cudaDeviceGetAttribute
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Compiling entry function '_Z17recursiveTraverseiPP4EdgePiS2_iS2_' for 'sm_35'
+ptxas info    : Function properties for _Z17recursiveTraverseiPP4EdgePiS2_iS2_
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 25 registers, 368 bytes cmem[0]
+ptxas info    : Function properties for cudaMalloc
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for cudaOccupancyMaxActiveBlocksPerMultiprocessor
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for cudaGetDevice
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Compiling entry function '_Z18BreadthFirstSearchPP4EdgePiS2_S2_S2_S2_S2_i' for 'sm_35'
+ptxas info    : Function properties for _Z18BreadthFirstSearchPP4EdgePiS2_S2_S2_S2_S2_i
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 18 registers, 380 bytes cmem[0]
+ptxas info    : Function properties for cudaFuncGetAttributes
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : 0 bytes gmem
+ptxas info    : Function properties for cudaGetDevice
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for cudaFuncGetAttributes
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for cudaDeviceGetAttribute
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for cudaMalloc
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for cudaOccupancyMaxActiveBlocksPerMultiprocessor
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+

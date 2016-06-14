@@ -1,0 +1,319 @@
+  
+#include <stdio.h>
+#include <stdlib.h>
+#include "helpers.cuh"
+
+ struct Element{
+        int value;
+        int yPosition;
+        
+        struct Element * next;
+};
+
+
+// Inserts Node to the Linked List by Head Insertion - O(1)
+// Returns address of head which is the newly created node.
+struct Element * AddElement(struct Element * currentHead, int newValue, int newYposition)
+{
+    struct Element * newHead;
+               //  = (struct Element *) malloc(sizeof(struct Element));
+    cudaMallocManaged(&newHead,sizeof(struct Element)*1);	
+    checkCudaError();
+  
+    newHead->value = newValue;
+    newHead->yPosition= newYposition;
+    newHead->next = currentHead;
+  
+    return newHead;
+}
+ 
+ 
+__global__ void testkernelbfs( struct Element ** adjacencyList,
+                        int * vertices,
+                        int* inputV, int * finalLevel,int * output){
+                        
+                        
+    
+           
+          int index = blockIdx.x*blockDim.x+threadIdx.x;
+          
+          if(*finalLevel>0 & index<*vertices){
+          
+          struct Element * traverse = adjacencyList[index];
+          
+         
+          
+                if(traverse==NULL){
+                        output[index]=0;
+                                
+                }else{
+                       
+                        int ans=1;
+                        while (traverse != NULL) {
+                                printf("step in traversing %d* %d\n",inputV[traverse->yPosition],traverse->value);
+                            int val = (traverse->value )*(inputV[traverse->yPosition]);
+                            
+                            printf("Val is :%d", val);
+                            
+                            ans= ans+ val;
+                          
+                           // assert(traverse==NUL);
+                           traverse = traverse->next;
+                        } 
+                        
+                        output[index]=ans;
+                }
+         
+                       //    *finalLevel --;
+                           
+	                // testkernelbfs<<<ceil(*vertices/256.0),256>>>(adjacencyList, vertices ,parent, level, inputArray, lev+1,finalLevel,count);
+	                //BreadthFirstSearch<<<1,count>>>(adjacencyList, vertices, parent, level, inputsCircuits, lev,finalLevel,count);
+	                //cudaDeviceSynchronize();
+	                //checkCudaError();
+           
+           
+       
+                  
+        }
+
+} 
+
+
+int main(){
+
+
+cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);
+//cudaDeviceSetCacheConfig(cudaFuncCachePreferShared:);
+
+   //global variable asigning
+   
+   int * vertices;
+   int * edges;
+   int * inputArray;
+   int * outputArray;
+   int * startArrayCount;
+   int * finalLevel;
+   struct Element ** adjacencyList;
+   
+   
+   //CPU variables only
+   
+   int v1,v2,i; //int levelSize=2;
+   
+   //unfied memory allocation for int values
+   cudaMallocManaged(&vertices,sizeof(int)*1);	
+   checkCudaError();
+   cudaMallocManaged(&edges,sizeof(int)*1);	
+   checkCudaError();
+   cudaMallocManaged(&startArrayCount,sizeof(int)*1);	
+   checkCudaError();
+   cudaMallocManaged(&finalLevel,sizeof(int)*1);	
+   checkCudaError();
+   
+   *finalLevel = 2;
+   //scan first line of graph data
+    int noOfRows;
+    FILE * graphFile =fopen("dataT/graphT.txt","r");
+    fscanf(graphFile, "%d %d %d",&noOfRows, vertices, edges);
+        printf("No fo rows %d, No of Cols %d, nnz %d \n",noOfRows,*vertices,*edges);    //- done
+        
+
+   cudaMallocManaged(&(adjacencyList),sizeof(struct Elemnt*)*(*vertices));	
+   checkCudaError();   
+
+   //initialise main arrays
+        for (i = 0; i < *vertices; ++i) {
+                adjacencyList[i] = NULL;
+            
+         }
+         
+   //scan rest of the graph and create the adjacency list
+   
+        for (i = 0; i < *edges; ++i) {
+                 int val;
+                 fscanf(graphFile, "%d %d %d",&v1, &v2, &val);
+          
+                // Adding edge v1 --> v2
+                adjacencyList[v1] = AddElement(adjacencyList[v1], v2,val);
+  
+         }
+         
+    // Printing Adjacency List
+           printf("\nAdjacency List - of graph \n\n");
+            for (i = 0; i < *vertices; ++i) {
+                printf("adjacencyList[%d] -> ", i);
+          
+                struct Element * traverse = adjacencyList[i];
+          
+                while (traverse != NULL) {
+                    printf("(%d,%d) -> ", traverse->value, traverse->yPosition);
+                    traverse = traverse->next;
+                }
+          
+                printf("NULL\n");
+            }
+            
+     //scan the input vertices file
+     
+      FILE * vectorFile= fopen("dataT/input.txt","r");
+      fscanf(vectorFile,"%d",startArrayCount);
+      
+    //unified memory allocation for input vertice vector
+       cudaMallocManaged(&inputArray,sizeof(int)*(*startArrayCount));	
+       checkCudaError(); 
+       cudaMallocManaged(&outputArray,sizeof(int)*(*startArrayCount));	
+       checkCudaError(); 
+       
+    //asign values for input vector
+      for(i=0;i<*startArrayCount;i++){
+                int tempVal; 
+                fscanf(vectorFile,"%d",&tempVal);
+                inputArray[i]= tempVal;
+                printf("%d ,",inputArray[i]);
+        }     
+
+       
+       // int count= *startArrayCount;
+        
+    //start Time measurement
+	cudaEvent_t start,stop;
+	float elapsedtime;
+	cudaEventCreate(&start);
+	cudaEventRecord(start,0);	
+	
+	testkernelbfs<<<1,*vertices>>>(adjacencyList, vertices , inputArray, finalLevel,outputArray);
+	cudaDeviceSynchronize();
+	checkCudaError();
+
+	//stop Time measurement
+	cudaEventCreate(&stop);
+	cudaEventRecord(stop,0);
+	cudaEventSynchronize(stop);
+	cudaEventElapsedTime(&elapsedtime,start,stop);
+	fprintf(stderr,"Time spent for kernel : %.10f seconds\n",elapsedtime/(float)1000);
+	
+	
+	//print the output
+	
+	
+     printf("\nthe final output vector is:\n");
+        
+        for(i=0;i<*vertices;i++){
+                printf("%d,", outputArray[i]);
+        
+        }
+             
+             
+        return 0;
+}
+
+
+
+
+
+
+
+
+
+Portions Copyright (C) 2007-2015 NVIDIA Corporation
+GNU gdb (GDB) 7.6.2
+Copyright (C) 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-unknown-linux-gnu".
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>...
+Reading symbols from /home/e11064/CUDAEx/CUDALLBFS/a.out...done.
+(cuda-gdb) b 31
+Breakpoint 1 at 0x402fde: file bfsLLSMVP.cu, line 31.
+(cuda-gdb) b 53
+Breakpoint 2 at 0x402ffd: file bfsLLSMVP.cu, line 53.
+(cuda-gdb) b 42
+Note: breakpoint 2 also set at pc 0x402ffd.
+Breakpoint 3 at 0x402ffd: file bfsLLSMVP.cu, line 42.
+(cuda-gdb) run
+Starting program: /home/e11064/CUDAEx/CUDALLBFS/a.out 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[New Thread 0x7ffff612f700 (LWP 7255)]
+No fo rows 6, No of Cols 6, nnz 5 
+
+Adjacency List - of graph 
+
+adjacencyList[0] -> NULL
+adjacencyList[1] -> NULL
+adjacencyList[2] -> NULL
+adjacencyList[3] -> (1,1) -> (0,1) -> NULL
+adjacencyList[4] -> (2,1) -> NULL
+adjacencyList[5] -> (4,1) -> (3,1) -> NULL
+[Switching focus to CUDA kernel 0, grid 1, block (0,0,0), thread (0,0,0), device 0, sm 14, warp 0, lane 0]
+
+Breakpoint 1, testkernelbfs<<<(1,1,1),(6,1,1)>>> (adjacencyList=0x1100004000, 
+    vertices=0x1100000000, inputV=0x110000a000, finalLevel=0x1100003000, 
+    output=0x110000b000) at bfsLLSMVP.cu:38
+38	          int index = blockIdx.x*blockDim.x+threadIdx.x;
+(cuda-gdb) continue
+Continuing.
+
+Breakpoint 3, testkernelbfs<<<(1,1,1),(6,1,1)>>> (adjacencyList=0x1100004000, 
+    vertices=0x1100000000, inputV=0x110000a000, finalLevel=0x1100003000, 
+    output=0x110000b000) at bfsLLSMVP.cu:42
+42	          struct Element * traverse = adjacencyList[index];
+(cuda-gdb) print traverse
+$1 = (@generic Element * @local) 0x0
+(cuda-gdb) continue
+Continuing.
+[Switching focus to CUDA kernel 0, grid 1, block (0,0,0), thread (3,0,0), device 0, sm 14, warp 0, lane 3]
+
+Breakpoint 2, testkernelbfs<<<(1,1,1),(6,1,1)>>> (adjacencyList=0x1100004000, 
+    vertices=0x1100000000, inputV=0x110000a000, finalLevel=0x1100003000, 
+    output=0x110000b000) at bfsLLSMVP.cu:53
+53	                                printf("step in traversing %d* %d\n",inputV[traverse->yPosition],traverse->value);
+(cuda-gdb) print traverse->value
+$2 = 1
+(cuda-gdb) continue
+Continuing.
+
+Breakpoint 2, testkernelbfs<<<(1,1,1),(6,1,1)>>> (adjacencyList=0x1100004000, 
+    vertices=0x1100000000, inputV=0x110000a000, finalLevel=0x1100003000, 
+    output=0x110000b000) at bfsLLSMVP.cu:53
+53	                                printf("step in traversing %d* %d\n",inputV[traverse->yPosition],traverse->value);
+(cuda-gdb) print ans
+$3 = 2
+(cuda-gdb) continue
+Continuing.
+1 ,1 ,1 ,0 ,0 ,0 ,step in traversing 1* 1
+step in traversing 1* 2
+step in traversing 1* 4
+Val is :1Val is :2Val is :4step in traversing 1* 0
+step in traversing 1* 3
+Val is :0Val is :3Time spent for kernel : 133.9882965088 seconds
+
+the final output vector is:
+0,0,0,2,3,8,[Thread 0x7ffff7fda740 (LWP 7246) exited]
+[Inferior 1 (process 7246) exited normally]
+(cuda-gdb) continue
+The program is not being run.
+(cuda-gdb) q
+e11064@tesla:~/CUDAEx/CUDALLBFS$ ./a.out
+No fo rows 6, No of Cols 6, nnz 5 
+
+Adjacency List - of graph 
+
+adjacencyList[0] -> NULL
+adjacencyList[1] -> NULL
+adjacencyList[2] -> NULL
+adjacencyList[3] -> (1,1) -> (0,1) -> NULL
+adjacencyList[4] -> (2,1) -> NULL
+adjacencyList[5] -> (4,1) -> (3,1) -> NULL
+1 ,1 ,1 ,0 ,0 ,0 ,step in traversing 1* 1
+step in traversing 1* 2
+step in traversing 1* 4
+Val is :1Val is :2Val is :4step in traversing 1* 0
+step in traversing 1* 3
+Val is :0Val is :3Time spent for kernel : 0.0007963520 seconds
+
+the final output vector is:
+

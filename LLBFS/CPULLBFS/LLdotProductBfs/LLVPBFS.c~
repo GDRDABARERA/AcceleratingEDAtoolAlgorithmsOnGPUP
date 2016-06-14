@@ -1,0 +1,161 @@
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include<string.h>
+
+struct Element{
+        int value;
+        int yPosition;
+        
+        struct Element * next;
+};
+
+
+// Inserts Node to the Linked List by Head Insertion - O(1)
+// Returns address of head which is the newly created node.
+struct Element * AddElement(struct Element * currentHead, int newValue, int newYposition)
+{
+    struct Element * newHead
+                 = (struct Element *) malloc(sizeof(struct Element));
+  
+    newHead->value = newValue;
+    newHead->yPosition= newYposition;
+    newHead->next = currentHead;
+  
+    return newHead;
+}
+
+
+int main()
+{
+    int vertices, edges, v1, v2,NNZ, i;
+    int NoOfLevels=2;
+    
+    
+    int * inputVector;
+    int * tmp;
+    
+    
+        int noOfRows,noOfCols;
+        FILE * graphFile =fopen("graphT.txt","r");
+        fscanf(graphFile, "%d %d %d",&noOfRows, &noOfCols, &NNZ);
+        printf("No fo rows %d, No of Cols %d, nnz %d \n",noOfRows,noOfCols,NNZ);    //- done
+        vertices = noOfRows;
+        edges =NNZ;
+        
+        
+        struct Element * adjacencyXpositionList[vertices];
+            // Size is made (vertices + 1) to use the
+            // array as 1-indexed, for simplicity
+          
+    // Must initialize your array
+         for (i = 0; i < vertices; ++i) {
+                adjacencyXpositionList[i] = NULL;
+              
+         }
+         
+          inputVector=malloc(vertices*sizeof(int));
+          tmp =malloc(vertices*sizeof(int));
+     
+         
+          for (i = 0; i < edges; ++i) {
+                 int val;
+                 fscanf(graphFile, "%d %d %d",&v1, &v2, &val);
+                printf("%d %d %d",v1, v2, val);
+                // Adding edge v1 --> v2
+               adjacencyXpositionList[v1] = AddElement(adjacencyXpositionList[v1],val, v2);
+          
+                // Adding edge v2 --> v1
+                // Remove this if you want a Directed Graph
+               // adjacencyList[v2] = AddEdge(adjacencyList[v2], v1);
+          }
+         
+       
+      // Printing Adjacency List
+         printf("\nAdjacency X position List - of graph \n\n");
+            for (i = 0; i < vertices; ++i) {
+                printf("adjacencyXpositionList[%d] -> ", i);
+          
+                struct Element * traverse = adjacencyXpositionList[i];
+          
+                while (traverse != NULL) {
+                    printf("(%d,%d) -> ", traverse->yPosition,traverse->value);
+                    traverse = traverse->next;
+                }
+          
+                printf("NULL\n");
+            }
+            
+            
+            printf("Getting the input vector: \n");
+            int vectorSize;
+              
+           FILE * vectorFile= fopen("input.txt","r");
+           fscanf(vectorFile,"%d",&vectorSize);
+        
+        
+        
+                for(i=0;i<vectorSize;i++){
+                        int tempVal; 
+                        fscanf(vectorFile,"%d",&tempVal);
+                        inputVector[i]= tempVal;
+                        printf("%d ,",inputVector[i]);
+                }
+        printf("\n");
+        
+        int j;
+        for(i=0;i<NoOfLevels;i++){
+        
+          for(j=0;j<vertices;j++){
+          
+                 struct Element * traverse = adjacencyXpositionList[j];
+          
+                if(traverse==NULL){
+                        tmp[j]=0;
+                                
+                }else{
+                       
+                        int ans=0;
+                        while (traverse != NULL) {
+                                printf("step in traversing %d* %d\n",inputVector[traverse->yPosition],traverse->value);
+                            ans = ans+ (traverse->value* inputVector[traverse->yPosition]);
+                            traverse = traverse->next;
+                        }
+                        
+                        tmp[j]=ans;
+                }
+                
+               
+          
+          }  
+          
+               for(i=0;i<vertices;i++){
+                    inputVector[i]=tmp[i];
+               }
+          
+                printf("the intermediate  vector is:\n");
+                
+                for(i=0;i<vertices;i++){
+                        printf("%d,", inputVector[i]);
+                
+                }
+              
+        
+        }
+        
+        printf("the final output vector is:\n");
+        
+        for(i=0;i<vertices;i++){
+                printf("%d,", inputVector[i]);
+        
+        }
+        
+        printf("completion of linkedList vector product BFS execution...\n");
+         
+     return 0;
+     
+     
+     
+}

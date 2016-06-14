@@ -1,0 +1,189 @@
+e11064@tesla:~/CUDAEx/CPULLBFS$ cd directLLbfs/
+e11064@tesla:~/CUDAEx/CPULLBFS/directLLbfs$ ls
+a.out	   bfsRR.c		data1	    helpers.cuh  output        t
+bfs.c	   bfsRR.c~		data2	    k		 p	       test.c
+bfsLL.cu   bfsWithmanyInputs.c	data3	    kb		 profiler.txt  test.txt
+bfsRR1.c   compile.sh		gmon.out    kl		 profile.txt
+bfsRR1.c~  data			helpers.cu  kp		 RR.tar.gz
+e11064@tesla:~/CUDAEx/CPULLBFS/directLLbfs$ cd data3
+e11064@tesla:~/CUDAEx/CPULLBFS/directLLbfs/data3$ ls
+circuitV1.txt  inputV1.txt
+e11064@tesla:~/CUDAEx/CPULLBFS/directLLbfs/data3$ cd ..
+e11064@tesla:~/CUDAEx/CPULLBFS/directLLbfs$ nano bfsRR1.c
+e11064@tesla:~/CUDAEx/CPULLBFS/directLLbfs$ gcc -Wall -pg  bfsRR1.c -o kp 
+e11064@tesla:~/CUDAEx/CPULLBFS/directLLbfs$ ./kp
+No fo rows 76, No of Cols 76, nnz 144 
+
+Adjacency List - of graph 
+
+adjacencyList[0] -> 17 -> 16 -> 15 -> 14 -> NULL
+adjacencyList[1] -> 18 -> 15 -> 14 -> NULL
+adjacencyList[2] -> 22 -> 21 -> 20 -> 19 -> NULL
+adjacencyList[3] -> 23 -> 20 -> 19 -> NULL
+adjacencyList[4] -> 27 -> 26 -> 25 -> 24 -> NULL
+adjacencyList[5] -> 28 -> 25 -> 24 -> NULL
+adjacencyList[6] -> 32 -> 31 -> 30 -> 29 -> NULL
+adjacencyList[7] -> 33 -> 30 -> 29 -> NULL
+adjacencyList[8] -> 61 -> 59 -> 58 -> 56 -> 55 -> 54 -> 52 -> 51 -> 50 -> NULL
+adjacencyList[9] -> 61 -> 58 -> 54 -> 49 -> 46 -> NULL
+adjacencyList[10] -> 32 -> 27 -> 22 -> 17 -> NULL
+adjacencyList[11] -> 31 -> 26 -> 21 -> 16 -> NULL
+adjacencyList[12] -> 30 -> 25 -> 20 -> 15 -> NULL
+adjacencyList[13] -> 29 -> 24 -> 19 -> 14 -> NULL
+adjacencyList[14] -> 34 -> NULL
+adjacencyList[15] -> 34 -> NULL
+adjacencyList[16] -> 35 -> NULL
+adjacencyList[17] -> 35 -> NULL
+adjacencyList[18] -> 35 -> NULL
+adjacencyList[19] -> 36 -> NULL
+adjacencyList[20] -> 36 -> NULL
+adjacencyList[21] -> 37 -> NULL
+adjacencyList[22] -> 37 -> NULL
+adjacencyList[23] -> 37 -> NULL
+adjacencyList[24] -> 38 -> NULL
+adjacencyList[25] -> 38 -> NULL
+adjacencyList[26] -> 39 -> NULL
+adjacencyList[27] -> 39 -> NULL
+adjacencyList[28] -> 39 -> NULL
+adjacencyList[29] -> 40 -> NULL
+adjacencyList[30] -> 40 -> NULL
+adjacencyList[31] -> 41 -> NULL
+adjacencyList[32] -> 41 -> NULL
+adjacencyList[33] -> 41 -> NULL
+adjacencyList[34] -> 64 -> 47 -> 46 -> 45 -> 44 -> 43 -> NULL
+adjacencyList[35] -> 48 -> 42 -> NULL
+adjacencyList[36] -> 66 -> 51 -> 50 -> 49 -> 46 -> 45 -> NULL
+adjacencyList[37] -> 53 -> 52 -> 43 -> NULL
+adjacencyList[38] -> 68 -> 55 -> 54 -> 50 -> 49 -> 47 -> 46 -> NULL
+adjacencyList[39] -> 57 -> 56 -> 44 -> NULL
+adjacencyList[40] -> 70 -> 58 -> 49 -> 47 -> NULL
+adjacencyList[41] -> 60 -> 59 -> 50 -> 45 -> NULL
+adjacencyList[42] -> 62 -> NULL
+adjacencyList[43] -> 62 -> NULL
+adjacencyList[44] -> 62 -> NULL
+adjacencyList[45] -> 62 -> NULL
+adjacencyList[46] -> 63 -> NULL
+adjacencyList[47] -> NULL
+adjacencyList[48] -> 64 -> NULL
+adjacencyList[49] -> 65 -> NULL
+adjacencyList[50] -> 65 -> NULL
+adjacencyList[51] -> 65 -> NULL
+adjacencyList[52] -> 65 -> NULL
+adjacencyList[53] -> 66 -> NULL
+adjacencyList[54] -> 67 -> NULL
+adjacencyList[55] -> 67 -> NULL
+adjacencyList[56] -> 67 -> NULL
+adjacencyList[57] -> 68 -> NULL
+adjacencyList[58] -> 69 -> NULL
+adjacencyList[59] -> 69 -> NULL
+adjacencyList[60] -> 70 -> NULL
+adjacencyList[61] -> 75 -> NULL
+adjacencyList[62] -> 63 -> NULL
+adjacencyList[63] -> NULL
+adjacencyList[64] -> 71 -> NULL
+adjacencyList[65] -> 71 -> NULL
+adjacencyList[66] -> 72 -> NULL
+adjacencyList[67] -> 72 -> NULL
+adjacencyList[68] -> 74 -> NULL
+adjacencyList[69] -> 74 -> NULL
+adjacencyList[70] -> 75 -> NULL
+adjacencyList[71] -> 73 -> NULL
+adjacencyList[72] -> 73 -> NULL
+adjacencyList[73] -> NULL
+adjacencyList[74] -> 73 -> NULL
+adjacencyList[75] -> 73 -> NULL
+going to recurssion k=0 
+going to recurssion k=1 
+going to recurssion k=2 
+going to recurssion k=3 
+going to recurssion k=4 
+going to recurssion k=5 
+going to recurssion k=6 
+going to recurssion k=7 
+going to recurssion k=8 
+going to recurssion k=9 
+going to recurssion k=10 
+going to recurssion k=11 
+going to recurssion k=12 
+going to recurssion k=13 
+
+Level and Parent Arrays -
+Level of Vertex 0 is 0, Parent is 0
+Level of Vertex 1 is 0, Parent is 0
+Level of Vertex 2 is 0, Parent is 0
+Level of Vertex 3 is 0, Parent is 0
+Level of Vertex 4 is 0, Parent is 0
+Level of Vertex 5 is 0, Parent is 0
+Level of Vertex 6 is 0, Parent is 0
+Level of Vertex 7 is 0, Parent is 0
+Level of Vertex 8 is 0, Parent is 0
+Level of Vertex 9 is 0, Parent is 0
+Level of Vertex 10 is 0, Parent is 0
+Level of Vertex 11 is 0, Parent is 0
+Level of Vertex 12 is 0, Parent is 0
+Level of Vertex 13 is 0, Parent is 0
+Level of Vertex 14 is -1, Parent is 0
+Level of Vertex 15 is -1, Parent is 0
+Level of Vertex 16 is -1, Parent is 0
+Level of Vertex 17 is 1, Parent is 0
+Level of Vertex 18 is 1, Parent is 1
+Level of Vertex 19 is -1, Parent is 0
+Level of Vertex 20 is -1, Parent is 0
+Level of Vertex 21 is -1, Parent is 0
+Level of Vertex 22 is 1, Parent is 2
+Level of Vertex 23 is 1, Parent is 3
+Level of Vertex 24 is -1, Parent is 0
+Level of Vertex 25 is -1, Parent is 0
+Level of Vertex 26 is -1, Parent is 0
+Level of Vertex 27 is 1, Parent is 4
+Level of Vertex 28 is 1, Parent is 5
+Level of Vertex 29 is 1, Parent is 13
+Level of Vertex 30 is 1, Parent is 12
+Level of Vertex 31 is 1, Parent is 11
+Level of Vertex 32 is 1, Parent is 6
+Level of Vertex 33 is 1, Parent is 7
+Level of Vertex 34 is -1, Parent is 0
+Level of Vertex 35 is 2, Parent is 17
+Level of Vertex 36 is -1, Parent is 0
+Level of Vertex 37 is 2, Parent is 22
+Level of Vertex 38 is -1, Parent is 0
+Level of Vertex 39 is 2, Parent is 27
+Level of Vertex 40 is 2, Parent is 30
+Level of Vertex 41 is 2, Parent is 32
+Level of Vertex 42 is -1, Parent is 0
+Level of Vertex 43 is -1, Parent is 0
+Level of Vertex 44 is -1, Parent is 0
+Level of Vertex 45 is -1, Parent is 0
+Level of Vertex 46 is -1, Parent is 0
+Level of Vertex 47 is -1, Parent is 0
+Level of Vertex 48 is -1, Parent is 0
+Level of Vertex 49 is -1, Parent is 0
+Level of Vertex 50 is -1, Parent is 0
+Level of Vertex 51 is -1, Parent is 0
+Level of Vertex 52 is -1, Parent is 0
+Level of Vertex 53 is -1, Parent is 0
+Level of Vertex 54 is -1, Parent is 0
+Level of Vertex 55 is -1, Parent is 0
+Level of Vertex 56 is -1, Parent is 0
+Level of Vertex 57 is -1, Parent is 0
+Level of Vertex 58 is -1, Parent is 0
+Level of Vertex 59 is -1, Parent is 0
+Level of Vertex 60 is -1, Parent is 0
+Level of Vertex 61 is 1, Parent is 8
+Level of Vertex 62 is -1, Parent is 0
+Level of Vertex 63 is -1, Parent is 0
+Level of Vertex 64 is -1, Parent is 0
+Level of Vertex 65 is -1, Parent is 0
+Level of Vertex 66 is -1, Parent is 0
+Level of Vertex 67 is -1, Parent is 0
+Level of Vertex 68 is -1, Parent is 0
+Level of Vertex 69 is -1, Parent is 0
+Level of Vertex 70 is -1, Parent is 0
+Level of Vertex 71 is -1, Parent is 0
+Level of Vertex 72 is -1, Parent is 0
+Level of Vertex 73 is -1, Parent is 0
+Level of Vertex 74 is -1, Parent is 0
+Level of Vertex 75 is 2, Parent is 61
+vertices in level order when traversing :
+0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,10 ,11 ,12 ,13 ,  |  17 ,18 ,22 ,23 ,27 ,28 ,29 ,30 ,31 ,32 ,33 ,61 ,  |  35 ,37 ,39 ,40 ,41 ,75 ,  |  e11064@tesla:~/CUDAEx/CPULLBFS/directLLbfs$ 
+
